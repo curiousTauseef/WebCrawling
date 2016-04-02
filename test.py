@@ -10,43 +10,30 @@ from Utils import removePunct
 import urllib2
 import time, datetime, string
 
-link = 'http://wiadomosci.gazeta.pl/wiadomosci/0,0.html'
+link = 'http://wiadomosci.onet.pl'
 
 """ Read the main gazeta wiadomosci page """
 r = urllib2.urlopen(link).read()
 soup = BeautifulSoup(r, 'lxml')
 
-""" Find the sections where all the links are """
-section = soup.find(id = 'holder_201')
+Onet_Urls = []
+for article in soup.find_all('article'):
+    Onet_Urls.append(article.a.get('href'))
+    
+print Onet_Urls[8]
 
-""" Get the links of all the actual articles """
-Gazeta_Timeline = {}
-Gazeta_Urls = []
-for link in section.find_all('a'):
-    newUrl = link.get('href')
-    if(newUrl.startswith('http://wiadomosci.gazeta.pl/wiadomosci/') and (newUrl.endswith('.html')) and (newUrl not in Gazeta_Timeline)):
-        Gazeta_Timeline[newUrl] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-        Gazeta_Urls.append(newUrl)
-        
-r = urllib2.urlopen(Gazeta_Urls[2]).read()
+r = urllib2.urlopen(Onet_Urls[8]).read()
 soup = BeautifulSoup(r, 'lxml')
-print 'Working with link', Gazeta_Urls[2]
 
-f = open('../Output.txt', 'w')
-title = soup.title.string
-f.write(removePunct(title.encode('UTF8')) + '\n')
-print 'Title written to file'
+title = soup.find(id = 'mainTitle').h1.text.strip()
+print title
 
-bold = soup.find(id = 'gazeta_article_lead').get_text()
-f.write(removePunct(bold.encode('UTF8')) + '\n')
-print 'Bold paragraph written to file'
+bold = soup.find("meta", {"name":"description"})['content']
+#print bold
 
-body = soup.find(id = 'artykul')
+body = ''
+paragraphs = soup.find(id = 'detail').find_all('p')
+for par in paragraphs:
+    body += par.text
 
-for item in body.findAll(text = True, recursive = False):
-    """ Ignore comments and empty strings """
-    if((not isinstance(item, Comment)) or (not item)):
-        out = removePunct(item.encode('UTF8'))
-        f.write(out)
-print 'Article body written to file'
-f.close()
+#print body

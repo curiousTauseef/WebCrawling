@@ -10,54 +10,57 @@ from Utils import removePunct
 import urllib2, pickle
 import time, datetime
 
-link = 'http://wiadomosci.gazeta.pl/wiadomosci/0,0.html'
+def gazetaCrawl():
+    print 'GAZETA CRAWL'
 
-""" Read the main gazeta wiadomosci page """
-r = urllib2.urlopen(link).read()
-soup = BeautifulSoup(r, 'lxml')
-
-""" Find the sections where all the links are """
-section = soup.find(id = 'holder_201')
-
-""" Load the timeline from file """
-try:
-    Gazeta_Timeline = pickle.load(open('../Gazeta/Gazeta_Timeline.p', 'rb'))
-except IOError:
-    print 'Loading empty Gazeta_Timeline'
-    Gazeta_Timeline = {}
+    link = 'http://wiadomosci.gazeta.pl/wiadomosci/0,0.html'
     
-Gazeta_Urls = []
-
-""" Get the links of the articles you haven't seen before """
-for link in section.find_all('a'):
-    newUrl = link.get('href')
-    if(newUrl.startswith('http://wiadomosci.gazeta.pl/wiadomosci/') and (newUrl.endswith('.html')) and (newUrl not in Gazeta_Timeline)):
-        Gazeta_Timeline[newUrl] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-        Gazeta_Urls.append(newUrl)
-        
-""" Pickle the updated timeline """
-pickle.dump(Gazeta_Timeline, open("../Gazeta/Gazeta_Timeline.p", "wb"))
-   
-""" Get text of each article and write to file """
-print 'Adding', len(Gazeta_Urls), 'articles'
-for url in Gazeta_Urls:
-    r = urllib2.urlopen(url).read()
+    """ Read the main gazeta wiadomosci page """
+    r = urllib2.urlopen(link).read()
     soup = BeautifulSoup(r, 'lxml')
-    print 'Link:', url
-    title = soup.title.string
     
-    f = open('../Gazeta/Articles/' + title + '.txt', 'w')
-
-    f.write(removePunct(title.encode('UTF8')) + '\n')
+    """ Find the sections where all the links are """
+    section = soup.find(id = 'holder_201')
     
-    bold = soup.find(id = 'gazeta_article_lead').get_text()
-    f.write(removePunct(bold.encode('UTF8')) + '\n')
+    """ Load the timeline from file """
+    try:
+        Gazeta_Timeline = pickle.load(open('../Gazeta/Gazeta_Timeline.p', 'rb'))
+    except IOError:
+        print 'Loading empty Gazeta_Timeline'
+        Gazeta_Timeline = {}
+        
+    Gazeta_Urls = []
     
-    body = soup.find(id = 'artykul')
+    """ Get the links of the articles you haven't seen before """
+    for link in section.find_all('a'):
+        newUrl = link.get('href')
+        if(newUrl.startswith('http://wiadomosci.gazeta.pl/wiadomosci/') and (newUrl.endswith('.html')) and (newUrl not in Gazeta_Timeline)):
+            Gazeta_Timeline[newUrl] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+            Gazeta_Urls.append(newUrl)
+            
+    """ Pickle the updated timeline """
+    pickle.dump(Gazeta_Timeline, open("../Gazeta/Gazeta_Timeline.p", "wb"))
+       
+    """ Get text of each article and write to file """
+    print 'Adding', len(Gazeta_Urls), 'articles'
+    for url in Gazeta_Urls:
+        r = urllib2.urlopen(url).read()
+        soup = BeautifulSoup(r, 'lxml')
+        print 'Link:', url
+        title = soup.title.string
+        
+        f = open('../Gazeta/Articles/' + title + '.txt', 'w')
     
-    for item in body.findAll(text = True, recursive = False):
-        """ Ignore comments and empty strings """
-        if((not isinstance(item, Comment)) or (not item)):
-            out = removePunct(item.encode('UTF8'))
-            f.write(out)
-    f.close()
+        f.write(removePunct(title.encode('UTF8')) + '\n')
+        
+        bold = soup.find(id = 'gazeta_article_lead').get_text()
+        f.write(removePunct(bold.encode('UTF8')) + '\n')
+        
+        body = soup.find(id = 'artykul')
+        
+        for item in body.findAll(text = True, recursive = False):
+            """ Ignore comments and empty strings """
+            if((not isinstance(item, Comment)) or (not item)):
+                out = item.encode('UTF8')
+                f.write(out)
+        f.close()
