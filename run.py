@@ -7,10 +7,15 @@ Created on Sat Apr  2 23:32:13 2016
 
 from OnetCrawl import onetCrawl
 from GazetaCrawl import gazetaCrawl
+from WPCrawl import wpCrawl
 import time, datetime
 
-while True:
-    print datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-    onetCrawl()
-    gazetaCrawl()
-    time.sleep(3600)
+onetCrawl()
+gazetaCrawl()
+wpCrawl()
+#while True:
+#    print datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+#    onetCrawl()
+#    gazetaCrawl()
+#    wpCrawl()
+#    time.sleep(3600)

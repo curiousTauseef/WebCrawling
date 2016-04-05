@@ -8,32 +8,13 @@ Created on Mon Feb  8 22:19:41 2016
 from bs4 import BeautifulSoup, Comment
 from Utils import removePunct
 import urllib2
-import time, datetime, string
+import time, datetime, string, pickle
 
-link = 'http://wiadomosci.onet.pl'
 
-""" Read the main gazeta wiadomosci page """
+link = 'http://wiadomosci.wp.pl/kat,1515,title,Mezczyzna-ktory-zrobil-sobie-selfie-z-porywaczem-trafil-teraz-na-inne-historyczne-zdjecia,wid,18245759,wiadomosc.html'
+
+""" Read the main wp wiadomosci page """
 r = urllib2.urlopen(link).read()
 soup = BeautifulSoup(r, 'lxml')
-
-Onet_Urls = []
-for article in soup.find_all('article'):
-    Onet_Urls.append(article.a.get('href'))
     
-print Onet_Urls[8]
-
-r = urllib2.urlopen(Onet_Urls[8]).read()
-soup = BeautifulSoup(r, 'lxml')
-
-title = soup.find(id = 'mainTitle').h1.text.strip()
-print title
-
-bold = soup.find("meta", {"name":"description"})['content']
-#print bold
-
-body = ''
-paragraphs = soup.find(id = 'detail').find_all('p')
-for par in paragraphs:
-    body += par.text
-
-#print body
+print soup.prettify()

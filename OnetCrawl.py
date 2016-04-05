@@ -48,10 +48,10 @@ def onetCrawl():
         
         f = open('../Onet/Articles/' + title + '.txt', 'w')
     
-        f.write(removePunct(title.encode('UTF8')) + '\n')
+        f.write('TITLE:' + removePunct(title.encode('UTF8')) + '\n')
         
         bold = soup.find("meta", {"name":"description"})['content']
-        f.write(removePunct(bold.encode('UTF8')) + '\n')
+        f.write('BOLD:' + removePunct(bold.encode('UTF8')) + '\n')
         
         body = ''
         try:
@@ -59,7 +59,7 @@ def onetCrawl():
             for par in paragraphs:
                 body += par.text
             
-            f.write(body.encode('UTF8'))
+            f.write('BODY:' + body.encode('UTF8'))
         except AttributeError:
             print 'Article with no body'
             pass

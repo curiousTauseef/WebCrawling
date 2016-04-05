@@ -32,9 +32,10 @@ def gazetaCrawl():
     Gazeta_Urls = []
     
     """ Get the links of the articles you haven't seen before """
+    """ Checking for '-' is ugly making sure it is an actual article """
     for link in section.find_all('a'):
         newUrl = link.get('href')
-        if(newUrl.startswith('http://wiadomosci.gazeta.pl/wiadomosci/') and (newUrl.endswith('.html')) and (newUrl not in Gazeta_Timeline)):
+        if(newUrl.startswith('http://wiadomosci.gazeta.pl/wiadomosci/') and (newUrl.endswith('.html')) and (newUrl not in Gazeta_Timeline) and ('-' in newUrl)):
             Gazeta_Timeline[newUrl] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
             Gazeta_Urls.append(newUrl)
             
@@ -51,16 +52,21 @@ def gazetaCrawl():
         
         f = open('../Gazeta/Articles/' + title + '.txt', 'w')
     
-        f.write(removePunct(title.encode('UTF8')) + '\n')
+        f.write('TITLE:' + removePunct(title.encode('UTF8')) + '\n')
         
         bold = soup.find(id = 'gazeta_article_lead').get_text()
-        f.write(removePunct(bold.encode('UTF8')) + '\n')
+        f.write('BOLD:' + removePunct(bold.encode('UTF8')) + '\n')
         
         body = soup.find(id = 'artykul')
         
+        first = True
         for item in body.findAll(text = True, recursive = False):
             """ Ignore comments and empty strings """
             if((not isinstance(item, Comment)) or (not item)):
                 out = item.encode('UTF8')
-                f.write(out)
+                if(first):
+                    f.write('BODY:' + out)
+                    first = False
+                else:
+                    f.write(out)
         f.close()
