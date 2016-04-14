@@ -15,7 +15,7 @@ def onetCrawl():
 
     link = 'http://wiadomosci.onet.pl'
     
-    """ Read the main gazeta wiadomosci page """
+    """ Read the main onet wiadomosci page """
     r = urllib2.urlopen(link).read()
     soup = BeautifulSoup(r, 'lxml')
     

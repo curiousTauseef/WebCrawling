@@ -8,11 +8,13 @@ Created on Sat Apr  2 23:32:13 2016
 from OnetCrawl import onetCrawl
 from GazetaCrawl import gazetaCrawl
 from WPCrawl import wpCrawl
+from InteriaCrawl import interiaCrawl
 import time, datetime
 
 onetCrawl()
 gazetaCrawl()
 wpCrawl()
+interiaCrawl()
 #while True:
 #    print datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 #    onetCrawl()
