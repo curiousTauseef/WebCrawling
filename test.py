@@ -5,42 +5,47 @@ Created on Mon Feb  8 22:19:41 2016
 @author: piotrgrudzien
 """
 
-from bs4 import BeautifulSoup, Comment
-from selenium import webdriver
-from urllib2 import urlopen
+from bs4 import BeautifulSoup
 import urllib2
 
-url = 'http://www.tvn24.pl'
+link = 'http://wyborcza.pl'
 
-driver = webdriver.Firefox()
-driver.get(url)
+r = urllib2.urlopen(link).read()
+soup = BeautifulSoup(r, 'lxml')
 
-soup = BeautifulSoup(driver.page_source, 'lxml')
+Wyborcza_Urls = []
 
-TVN24Urls = []
-
-for div in soup.find_all('div'):
+""" MT1 """
+a_tags = soup.find_all(id = "LinkArea:MT1")
+for link in a_tags:
+    Wyborcza_Urls.append(link['href'])
+    
+""" MT2 """
+a_tags = soup.find_all(id = "LinkArea:MT2")
+for link in a_tags:
+    Wyborcza_Urls.append(link['href'])
+    
+""" Wydarzenia """
+a_tags = soup.find_all(id = "LinkArea:Wydarzenia")
+for link in a_tags:
+    if(link['title'] != 'Wydarzenia'):
+        Wyborcza_Urls.append(link['href'])
+        
+""" Najnowsze """
+a_tags = soup.find_all(id = "LinkArea:najnowsze")
+for link in a_tags:
     try:
-        if(div['class'][0]) in ['col_1', 'miniNews', 'topSiteSubjects', 'mainLeftColumn', 'col-2-1 ', 'col-2-2 ', 'art-info', 'articleCommentContainer fr', 'content']:
-            for link in div.find_all('a'):
-                if(link['href'].endswith('.html')):
-                    TVN24Urls.append(link['href'])
+        if(link['title'] != 'Najnowsze'):
+            Wyborcza_Urls.append(link['href'])
     except KeyError:
         pass
     
-TVN24Urls = list(set(TVN24Urls))
+""" Remove duplicates """
+Wyborcza_Urls = list(set(Wyborcza_Urls))
 
-TVN24Urls = [x if x.startswith('http') else url + x for x in TVN24Urls]
-    
-#for link in TVN24Urls:
-#    print link
-    
-#print 'Total number:', len(TVN24Urls)
+""" Only keep those ending in .html """
+Wyborcza_Urls = [x for x in Wyborcza_Urls if x.endswith('html')]
 
-driver.quit()
-
-r = urllib2.urlopen(TVN24Urls[0]).read()
-soup = BeautifulSoup(r, 'lxml')
-
-print TVN24Urls[0]
-print soup.prettify()
+for url in Wyborcza_Urls:
+    print url
+print 'Number of links:', len(Wyborcza_Urls)
