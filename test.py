@@ -46,6 +46,19 @@ Wyborcza_Urls = list(set(Wyborcza_Urls))
 """ Only keep those ending in .html """
 Wyborcza_Urls = [x for x in Wyborcza_Urls if x.endswith('html')]
 
-for url in Wyborcza_Urls:
-    print url
-print 'Number of links:', len(Wyborcza_Urls)
+#for url in Wyborcza_Urls:
+#    print url
+#print 'Number of links:', len(Wyborcza_Urls)
+
+print 'Working with', Wyborcza_Urls[0]
+
+r = urllib2.urlopen(Wyborcza_Urls[0]).read()
+soup = BeautifulSoup(r, 'lxml')
+
+title = soup.find(id = 'holder_101').h1.text
+
+print title
+
+body = soup.find('meta', {'property':'og:description'})['content'].strip()
+
+print body

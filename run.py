@@ -9,12 +9,14 @@ from OnetCrawl import onetCrawl
 from GazetaCrawl import gazetaCrawl
 from WPCrawl import wpCrawl
 from InteriaCrawl import interiaCrawl
+from WyborczaCrawl import wyborczaCrawl
 import time, datetime
 
-onetCrawl()
-gazetaCrawl()
-wpCrawl()
-interiaCrawl()
+#onetCrawl()
+#gazetaCrawl()
+#wpCrawl()
+#interiaCrawl()
+wyborczaCrawl()
 #while True:
 #    print datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 #    onetCrawl()
