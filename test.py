@@ -5,60 +5,54 @@ Created on Mon Feb  8 22:19:41 2016
 @author: piotrgrudzien
 """
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 from bs4 import BeautifulSoup
 import urllib2
 
-link = 'http://wyborcza.pl'
+link = 'http://niezalezna.pl/'
 
-r = urllib2.urlopen(link).read()
-soup = BeautifulSoup(r, 'lxml')
+opener = urllib2.build_opener()
+opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+response = opener.open(link)
 
-Wyborcza_Urls = []
+soup = BeautifulSoup(response, 'lxml')
 
-""" MT1 """
-a_tags = soup.find_all(id = "LinkArea:MT1")
-for link in a_tags:
-    Wyborcza_Urls.append(link['href'])
-    
-""" MT2 """
-a_tags = soup.find_all(id = "LinkArea:MT2")
-for link in a_tags:
-    Wyborcza_Urls.append(link['href'])
-    
-""" Wydarzenia """
-a_tags = soup.find_all(id = "LinkArea:Wydarzenia")
-for link in a_tags:
-    if(link['title'] != 'Wydarzenia'):
-        Wyborcza_Urls.append(link['href'])
+Niezalezna_Urls = []
+
+for l in soup.find_all('a'):
+    newUrl = l.get('href')
+    if(newUrl.startswith(link) & (newUrl != link)):
+        Niezalezna_Urls.append(l.get('href'))
+    elif((newUrl.startswith('/')) & (is_number(newUrl[1:3]))):
+        Niezalezna_Urls.append(link + newUrl[1:])
         
-""" Najnowsze """
-a_tags = soup.find_all(id = "LinkArea:najnowsze")
-for link in a_tags:
-    try:
-        if(link['title'] != 'Najnowsze'):
-            Wyborcza_Urls.append(link['href'])
-    except KeyError:
-        pass
+Niezalezna_Urls = list(set(Niezalezna_Urls))
+        
+#for link in Niezalezna_Urls:
+#    print link
     
-""" Remove duplicates """
-Wyborcza_Urls = list(set(Wyborcza_Urls))
+#print Niezalezna_Urls[0]
+    
+print 'http://niezalezna.pl/79263-gwizdy-na-lecha'
 
-""" Only keep those ending in .html """
-Wyborcza_Urls = [x for x in Wyborcza_Urls if x.endswith('html')]
+response = opener.open('http://niezalezna.pl/79263-gwizdy-na-lecha')
 
-#for url in Wyborcza_Urls:
-#    print url
-#print 'Number of links:', len(Wyborcza_Urls)
+soup = BeautifulSoup(response, 'lxml')
 
-print 'Working with', Wyborcza_Urls[0]
+#print soup.prettify()
 
-r = urllib2.urlopen(Wyborcza_Urls[0]).read()
-soup = BeautifulSoup(r, 'lxml')
-
-title = soup.find(id = 'holder_101').h1.text
-
+title = soup.find(id = 'content').h1.text
 print title
 
-body = soup.find('meta', {'property':'og:description'})['content'].strip()
-
-print body
+#bold = soup.find(id = 'content').strong.text
+#print bold
+#
+#body = soup.find("div", {"class":"node-content"})
+#print 'TEXT'
+#print ''.join(soup.find("div", {"class":"node-content"}).findAll(text = True, recursive = False)).encode('UTF8')
