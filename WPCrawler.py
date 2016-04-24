@@ -11,16 +11,22 @@ from Crawler import Crawler
 import urllib2
 import time, datetime, string, pickle
 
+
 class WPCrawler(Crawler):
     def __init__(self):
         Crawler.__init__(self, 'http://wiadomosci.wp.pl', 'WP')
 
     def scrape_urls(self):
         print 'Scraping', self.name
-        for article in self.mainPage.find_all('article'):
-            new_url = article.a.get('href')
-            if new_url not in self.timeline:
-                self.urls.append(new_url)
+        # TODO implement all the ones below in a similar way
+        outer_div = self.mainPage.find(id='bxNajnowszeWiad')
+        for innerDiv in outer_div.find_all('div'):
+            try:
+                new_url = innerDiv.find('a', {'class' : 'lnk_nw'})['href']
+                if new_url not in self.timeline:
+                    self.urls.append(new_url)
+            except TypeError:
+                pass
 
     def scrape_text(self, link):
 
