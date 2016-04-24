@@ -21,24 +21,26 @@ class Crawler:
         self.urls = []
         self.logger = None
         self.currentLink = None
-        self.title = None
-        self.bold = None
-        self.body = None
+        self.title = ''
+        self.bold = ''
+        self.body = ''
 
     def crawl(self):
-        self.logger = Logger(Utils.timestamp())
-        self.logger.log(Logger.INFO, 'Starting ' + self.name + ' crawl')
-        self.urls = []
-        self.load_timeline()
-        self.mainPage = self.read_page(self.baseLink)
-        self.scrape_urls()
+        self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
+        self.logger.log(Logger.INFO, 'Starting ' + self.name + ' crawl') # log start of the crawl
+        self.urls = [] # prepare empty url list
+        self.load_timeline() # load timeline from disk
+        self.mainPage = self.read_page(self.baseLink) # load main page
+        self.scrape_urls() # get all article urls
+        self.urls = list(set(self.urls)) # deduplicate article urls
         for self.currentLink in self.urls:
-            print str(self.urls.index(self.currentLink) + 1), '/', str(len(self.urls))
-            self.logger.log(Logger.INFO, 'Link: ' + self.currentLink)
-            self.scrape_text(self.currentLink)
-            self.clear_text()
-            if self.checks_passed(): self.save_text()
-        self.save_timeline()
+            print str(self.urls.index(self.currentLink) + 1), '/', str(len(self.urls)) # write out progress to console
+            self.logger.log(Logger.INFO, 'Link: ' + self.currentLink) # log info about the article being read
+            self.scrape_text(self.currentLink) # get text from the article
+            self.clear_text() # remove punctuation, extra spaces, tabs, new-lines
+            if self.checks_passed(): # check if article data is valid
+                self.save_text() # write article data to file
+        self.save_timeline() # save the updated timeline to disk
 
     def load_timeline(self):
         try:
@@ -66,12 +68,13 @@ class Crawler:
         f.write('TITLE:' + self.title.encode('UTF8') + '\n')
         f.write('BOLD:' + self.bold.encode('UTF8') + '\n')
         f.write('BODY:' + self.body.encode('UTF8'))
+        f.close()
         self.timeline[self.currentLink] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
     def clear_text(self):
-        self.title = Utils.clearText(self.title)
-        self.bold = Utils.clearText(self.bold)
-        self.body = Utils.clearText(self.body)
+        self.title = Utils.clear_text(self.title)
+        self.bold = Utils.clear_text(self.bold)
+        self.body = Utils.clear_text(self.body)
 
     """ 'Abstract' method """
 
