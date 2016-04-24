@@ -12,4 +12,9 @@ def removePunct(text):
     return text
     
 def timestamp():
-    return datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%dT%H:%M:%S')
+    return datetime.datetime.fromtimestamp(time.time()).strftime("%Y-%m-%dT%H-%M-%S")
+    
+def clearText(text):
+    exclude = set(string.punctuation)
+    text = ''.join(ch for ch in text if ch not in exclude)
+    return ' '.join(text.split())

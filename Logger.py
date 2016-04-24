@@ -18,5 +18,5 @@ class Logger:
         
     def log(self, level, message):
         out = Utils.timestamp() + ' [' + level + '] ' + message
-        with(open(self.file, 'w')) as f:
-            f.write(out + '/n')
+        with(open(self.file, 'a')) as f:
+            f.write(out + '\n')
