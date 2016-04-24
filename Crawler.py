@@ -25,8 +25,8 @@ class Crawler:
         self.bold = ''
         self.body = ''
 
-    def crawl(self):
-        self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
+    def crawl(self, logger):
+        self.logger = logger # assign logger for this crawl
         self.logger.log(Logger.INFO, 'Starting ' + self.name + ' crawl') # log start of the crawl
         self.urls = [] # prepare empty url list
         self.load_timeline() # load timeline from disk
@@ -57,11 +57,10 @@ class Crawler:
         return BeautifulSoup(r, 'lxml')
 
     """ Can sometimes be overriden in subclasses """
-
     def checks_passed(self):
         self.logger.log(Logger.INFO, 'No of words: title - ' + str(len(self.title.split())) + ', bold - ' + str(
             len(self.bold.split())) + ', body - ' + str(len(self.body.split())))
-        return True
+        return str(len(self.title.split())) > 0
 
     def save_text(self):
         f = open('../' + self.name + '/Articles/' + self.title + '.txt', 'w')
