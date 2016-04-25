@@ -10,6 +10,7 @@ from Logger import Logger
 from OnetCrawler import OnetCrawler
 from WPCrawler import WPCrawler
 from InteriaCrawler import InteriaCrawler
+from GazetaCrawler import GazetaCrawler
 import time
 
 class Runner:
@@ -18,12 +19,14 @@ class Runner:
         self.onet_crawler = OnetCrawler()
         self.wp_crawler = WPCrawler()
         self.interia_crawler = InteriaCrawler()
+        self.gazeta_crawler = GazetaCrawler()
 
     def run(self):
         self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
-        self.onet_crawler.crawl(self.logger)
-        self.wp_crawler.crawl(self.logger)
-        self.interia_crawler.crawl(self.logger)
+        # self.onet_crawler.crawl(self.logger)
+        # self.wp_crawler.crawl(self.logger)
+        # self.interia_crawler.crawl(self.logger)
+        self.gazeta_crawler.crawl(self.logger)
 
 r = Runner()
 r.run()
