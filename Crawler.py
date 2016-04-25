@@ -30,7 +30,7 @@ class Crawler:
         self.logger.log(Logger.INFO, 'Starting ' + self.name + ' crawl') # log start of the crawl
         self.urls = [] # prepare empty url list
         self.load_timeline() # load timeline from disk
-        self.mainPage = self.read_page(self.baseLink) # load main page
+        self.load_main_page() # load main page
         self.scrape_urls() # get all article urls
         self.urls = list(set(self.urls)) # deduplicate article urls
         for self.currentLink in self.urls:
@@ -48,6 +48,10 @@ class Crawler:
         except IOError:
             self.logger.log(Logger.WARN, 'Loading empty ' + self.name + '_Timeline')
             self.timeline = {}
+
+    """ Can sometimes be overriden in subclasses """
+    def load_main_page(self):
+        self.mainPage = self.read_page(self.baseLink)  # load main page
 
     def save_timeline(self):
         pickle.dump(self.timeline, open('../' + self.name + '/' + self.name + '_Timeline.p', 'wb'))
