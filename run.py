@@ -13,27 +13,29 @@ from InteriaCrawler import InteriaCrawler
 from GazetaCrawler import GazetaCrawler
 from NiezaleznaCrawler import NiezaleznaCrawler
 from wPolityceCrawler import wPolityceCrawler
+from SimilarityFinder import SimilarityFinder
 import time
+
 
 class Runner:
     def __init__(self):
         self.logger = None
-        self.onet_crawler = OnetCrawler()
-        self.wp_crawler = WPCrawler()
-        self.interia_crawler = InteriaCrawler()
-        self.gazeta_crawler = GazetaCrawler()
-        self.niezalezna_crawler = NiezaleznaCrawler()
-        self.wpolityce_crawler = wPolityceCrawler()
+        self.crawlers = []
+        self.crawlers.append(OnetCrawler())
+        self.crawlers.append(WPCrawler())
+        self.crawlers.append(InteriaCrawler())
+        self.crawlers.append(GazetaCrawler())
+        self.crawlers.append(NiezaleznaCrawler())
+        self.crawlers.append(wPolityceCrawler())
+        self.sf = SimilarityFinder()
 
     def run(self):
         self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
-        # self.onet_crawler.crawl(self.logger)
-        # self.wp_crawler.crawl(self.logger)
-        # self.interia_crawler.crawl(self.logger)
-        # self.gazeta_crawler.crawl(self.logger)
-        # self.niezalezna_crawler.crawl(self.logger)
-        self.wpolityce_crawler.crawl(self.logger)
 
+        for crawler in self.crawlers:
+            crawler.crawl(self.logger)
+
+        # self.sf.getSimilar()
 r = Runner()
 r.run()
 
