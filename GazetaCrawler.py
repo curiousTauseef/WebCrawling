@@ -20,7 +20,7 @@ class GazetaCrawler(Crawler):
         for link in section.find_all('a'):
             new_url = link.get('href')
             if (new_url.startswith('http://wiadomosci.gazeta.pl/wiadomosci/') and (new_url.endswith('.html')) and (
-                    new_url not in self.timeline) and ('-' in new_url)):
+                    new_url not in self.urlmap) and ('-' in new_url)):
                 self.urls.append(new_url)
 
     def scrape_text(self, link):
@@ -40,7 +40,6 @@ class GazetaCrawler(Crawler):
         for item in id_article.findAll(text=True, recursive=False):
             """ Ignore comments and empty strings """
             if(not isinstance(item, Comment)) or (not item):
-                # self.body += item.encode('UTF8')
                 self.body += item
 
 # def gazetaCrawl():

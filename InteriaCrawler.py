@@ -23,7 +23,7 @@ class InteriaCrawler(Crawler):
                 new_url = article.get('href')
                 if not new_url.startswith(self.baseLink):
                     new_url = self.baseLink + new_url
-                if new_url not in self.timeline:
+                if new_url not in self.urlmap:
                     self.urls.append(new_url)
 
     def scrape_text(self, link):

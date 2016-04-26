@@ -26,11 +26,11 @@ class NiezaleznaCrawler(Crawler):
         for l in self.mainPage.find_all('a'):
             new_url = l.get('href')
             if new_url.startswith(self.baseLink) and (new_url != self.baseLink):
-                if new_url not in self.timeline:
+                if new_url not in self.urlmap:
                     self.urls.append(new_url)
             elif(new_url.startswith('/')) & (self.is_number(new_url[1:3])):
                 new_url = self.baseLink + new_url[1:]
-                if new_url not in self.timeline:
+                if new_url not in self.urlmap:
                     self.urls.append(new_url)
 
     def scrape_text(self, link):

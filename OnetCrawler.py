@@ -17,7 +17,7 @@ class OnetCrawler(Crawler):
         print 'Scraping', self.name
         for article in self.mainPage.find_all('article'):
             new_url = article.a.get('href')
-            if new_url not in self.timeline:
+            if new_url not in self.urlmap:
                 self.urls.append(new_url)
 
     def scrape_text(self, link):

@@ -29,7 +29,7 @@ class Crawler:
         self.logger = logger # assign logger for this crawl
         self.logger.log(Logger.INFO, 'Starting ' + self.name + ' crawl') # log start of the crawl
         self.urls = [] # prepare empty url list
-        self.load_timeline() # load timeline from disk
+        self.load_maps() # load maps from disk
         self.load_main_page() # load main page
         self.scrape_urls() # get all article urls
         self.urls = list(set(self.urls)) # deduplicate article urls
@@ -40,21 +40,36 @@ class Crawler:
             self.clear_text() # remove punctuation, extra spaces, tabs, new-lines
             if self.checks_passed(): # check if article data is valid
                 self.save_text() # write article data to file
-        self.save_timeline() # save the updated timeline to disk
+        self.save_maps() # save the updated timeline to disk
 
-    def load_timeline(self):
+    def load_maps(self):
+
         try:
-            self.timeline = pickle.load(open('../' + self.name + '/' + self.name + '_Timeline.p', 'rb'))
+            self.timeline = pickle.load(open('../Maps/Timeline.p', 'rb'))
         except IOError:
-            self.logger.log(Logger.WARN, 'Loading empty ' + self.name + '_Timeline')
+            self.logger.log(Logger.WARN, 'Loading empty Timeline')
             self.timeline = {}
+
+        try:
+            self.serwismap = pickle.load(open('../Maps/SerwisMap.p', 'rb'))
+        except IOError:
+            self.logger.log(Logger.WARN, 'Loading empty SerwisMap.p')
+            self.serwismap = {}
+
+        try:
+            self.urlmap = pickle.load(open('../Maps/UrlMap.p', 'rb'))
+        except IOError:
+            self.logger.log(Logger.WARN, 'Loading empty UrlMap.p')
+            self.urlmap = {}
 
     """ Can sometimes be overriden in subclasses """
     def load_main_page(self):
         self.mainPage = self.read_page(self.baseLink)  # load main page
 
-    def save_timeline(self):
-        pickle.dump(self.timeline, open('../' + self.name + '/' + self.name + '_Timeline.p', 'wb'))
+    def save_maps(self):
+        pickle.dump(self.timeline, open('../Maps/Timeline.p', 'wb'))
+        pickle.dump(self.serwismap, open('../Maps/SerwisMap.p', 'wb'))
+        pickle.dump(self.urlmap, open('../Maps/UrlMap.p', 'wb'))
 
     def read_page(self, link):
         r = urllib2.urlopen(link).read()
@@ -67,12 +82,15 @@ class Crawler:
         return str(len(self.title.split())) > 0
 
     def save_text(self):
-        f = open('../' + self.name + '/Articles/' + self.title + '.txt', 'w')
+        ID = len(self.timeline) + 1
+        f = open('../' + self.name + '/Articles/' + str(ID) + '.txt', 'w')
         f.write('TITLE:' + self.title.encode('UTF8') + '\n')
         f.write('BOLD:' + self.bold.encode('UTF8') + '\n')
         f.write('BODY:' + self.body.encode('UTF8'))
         f.close()
-        self.timeline[self.currentLink] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        self.timeline[ID] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        self.serwismap[ID] = self.name
+        self.urlmap[self.currentLink] = ID
 
     def clear_text(self):
         self.title = Utils.clear_text(self.title)
