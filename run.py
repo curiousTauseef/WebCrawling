@@ -20,6 +20,7 @@ import time
 class Runner:
     def __init__(self):
         self.logger = None
+        self.sf = None
         self.crawlers = []
         self.crawlers.append(OnetCrawler())
         self.crawlers.append(WPCrawler())
@@ -27,15 +28,15 @@ class Runner:
         self.crawlers.append(GazetaCrawler())
         self.crawlers.append(NiezaleznaCrawler())
         self.crawlers.append(wPolityceCrawler())
-        self.sf = SimilarityFinder()
 
     def run(self):
         self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
+        self.sf = SimilarityFinder(self.logger)
+        # for crawler in self.crawlers:
+        #     crawler.crawl(self.logger)
 
-        for crawler in self.crawlers:
-            crawler.crawl(self.logger)
+        self.sf.get_similar()
 
-        # self.sf.getSimilar()
 r = Runner()
 r.run()
 

@@ -24,6 +24,9 @@ class Crawler:
         self.title = ''
         self.bold = ''
         self.body = ''
+        self.timeline = None
+        self.serwismap = None
+        self.urlmap = None
 
     def crawl(self, logger):
         self.logger = logger # assign logger for this crawl
@@ -43,24 +46,9 @@ class Crawler:
         self.save_maps() # save the updated timeline to disk
 
     def load_maps(self):
-
-        try:
-            self.timeline = pickle.load(open('../Maps/Timeline.p', 'rb'))
-        except IOError:
-            self.logger.log(Logger.WARN, 'Loading empty Timeline')
-            self.timeline = {}
-
-        try:
-            self.serwismap = pickle.load(open('../Maps/SerwisMap.p', 'rb'))
-        except IOError:
-            self.logger.log(Logger.WARN, 'Loading empty SerwisMap.p')
-            self.serwismap = {}
-
-        try:
-            self.urlmap = pickle.load(open('../Maps/UrlMap.p', 'rb'))
-        except IOError:
-            self.logger.log(Logger.WARN, 'Loading empty UrlMap.p')
-            self.urlmap = {}
+        self.timeline = Utils.load_map('Timeline', self.logger)
+        self.serwismap = Utils.load_map('SerwisMap', self.logger)
+        self.urlmap = Utils.load_map('UrlMap', self.logger)
 
     """ Can sometimes be overriden in subclasses """
     def load_main_page(self):
