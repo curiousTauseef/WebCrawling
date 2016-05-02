@@ -79,6 +79,12 @@ class Crawler:
         self.timeline[ID] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         self.serwismap[ID] = self.name
         self.urlmap[ID] = self.currentLink
+        self.reset()  # reset title, bold and body holders
+
+    def reset(self):
+        self.title = ''
+        self.bold = ''
+        self.body = ''
 
     def clear_text(self):
         self.title = Utils.clear_text(self.title)

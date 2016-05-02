@@ -22,7 +22,7 @@ class SimilarityFinder:
     def get_similar(self):
         self.load_maps()
         self.load_articles()
-        self.get_top(100)
+        self.get_top(10)
 
     def load_maps(self):
         self.timeline = Utils.load_map('Timeline', self.logger)
@@ -35,8 +35,8 @@ class SimilarityFinder:
             article = Utils.read(ID, self.serwismap[ID])
             self.titles.insert(ID, article[sections['TITLE']])
             self.texts.insert(ID, ' '.join([article[sections['BOLD']], article[sections['BODY']]]))
-        self.titles = list(set(self.titles))
-        self.texts = list(set(self.texts))
+        # self.titles = list(set(self.titles))
+        # self.texts = list(set(self.texts))
 
     def get_top(self, n):
         vect = TfidfVectorizer()
@@ -46,7 +46,7 @@ class SimilarityFinder:
         count = 0
         while count < n:
             indices = Utils.get_max_indices(sim)
-            if sim[indices] < 1.0 and self.serwismap[indices[0]] == self.serwismap[indices[1]]:
+            if sim[indices] < 0.99 and self.serwismap[indices[0]] == self.serwismap[indices[1]]:
                 for i in [0, 1]:
                     # print self.serwismap[indices[i]], ':', self.titles[indices[i]]
                     print self.serwismap[indices[i]], ':', self.texts[indices[i]]

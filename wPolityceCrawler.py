@@ -26,7 +26,7 @@ class wPolityceCrawler(Crawler):
 
         self.title = soup.title.string
 
-        self.body = soup.find('div', {'class':'article-body intext-ads'}).text
+        self.body = soup.find('div', {'class': 'article-body intext-ads'}).text
 
 # def wPolityceCrawl():
 #     print 'WPOLITYCE CRAWL'

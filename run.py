@@ -32,10 +32,10 @@ class Runner:
     def run(self):
         self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
         self.sf = SimilarityFinder(self.logger)
-        for crawler in self.crawlers:
-            crawler.crawl(self.logger)
+        # for crawler in self.crawlers:
+        #     crawler.crawl(self.logger)
 
-        # self.sf.get_similar()
+        self.sf.get_similar()
 
 r = Runner()
 r.run()
