@@ -5,6 +5,7 @@ Created on Sat Apr  2 19:22:05 2016
 @author: piotrgrudzien
 """
 import string, datetime, time, re, pickle
+import numpy as np
 from Logger import Logger
 
 
@@ -43,3 +44,9 @@ def read(ID, serwis):
         raise AttributeError('Article', str(ID), ', serwis', serwis, 'has', str(len(article)), 'lines')
     article = [line[line.find(':') + 1:] for line in article]
     return article
+
+
+def get_max_indices(matrix):
+    arg_max = np.argmax(matrix)
+    rows = matrix.shape[1]
+    return np.floor_divide(arg_max, rows), arg_max % rows

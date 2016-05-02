@@ -21,10 +21,10 @@ class InteriaCrawler(Crawler):
         for article in self.mainPage.find_all('a'):
             if ',nId,' in article.get('href'):
                 new_url = article.get('href')
-                if not new_url.startswith(self.baseLink):
+                if not new_url.startswith(self.baseLink) and not new_url.startswith('http'):
                     new_url = self.baseLink + new_url
-                if new_url not in self.urlmap:
-                    self.urls.append(new_url)
+                    if new_url not in self.urlmap:
+                        self.urls.append(new_url)
 
     def scrape_text(self, link):
 

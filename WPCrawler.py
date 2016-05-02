@@ -71,13 +71,13 @@ class WPCrawler(Crawler):
 
         elif section_id is 'bxWiadSwiat':
             for link_div in outer_div.find_all('a'):
-                    try:
-                        if link_div['href'].endswith('wiadomosc.html'):
-                            new_url = self.baseLink + link_div['href']
-                            if new_url not in self.urlmap:
-                                self.urls.append(new_url)
-                    except TypeError:
-                        pass
+                try:
+                    if link_div['href'].endswith('wiadomosc.html'):
+                        new_url = self.baseLink + link_div['href']
+                        if new_url not in self.urlmap:
+                            self.urls.append(new_url)
+                except TypeError:
+                    pass
 
         elif section_id is 'bxTylkowWP':
             for link_div in outer_div.find_all('a'):

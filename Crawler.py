@@ -78,7 +78,7 @@ class Crawler:
         f.close()
         self.timeline[ID] = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         self.serwismap[ID] = self.name
-        self.urlmap[self.currentLink] = ID
+        self.urlmap[ID] = self.currentLink
 
     def clear_text(self):
         self.title = Utils.clear_text(self.title)
