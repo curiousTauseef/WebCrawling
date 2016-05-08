@@ -22,7 +22,7 @@ class SimilarityFinder:
     def get_similar(self):
         self.load_maps()
         self.load_articles()
-        self.get_top(10)
+        self.get_top(100)
 
     def load_maps(self):
         self.timeline = Utils.load_map('Timeline', self.logger)
@@ -46,7 +46,7 @@ class SimilarityFinder:
         count = 0
         while count < n:
             indices = Utils.get_max_indices(sim)
-            if sim[indices] < 0.99 and self.serwismap[indices[0]] == self.serwismap[indices[1]]:
+            if sim[indices] < 0.99 and self.serwismap[indices[0]] != self.serwismap[indices[1]]:
                 for i in [0, 1]:
                     # print self.serwismap[indices[i]], ':', self.titles[indices[i]]
                     print self.serwismap[indices[i]], ':', self.texts[indices[i]]

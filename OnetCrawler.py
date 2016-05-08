@@ -24,14 +24,20 @@ class OnetCrawler(Crawler):
 
         soup = self.read_page(link)
 
-        self.title = soup.find(id='mainTitle').h1.text.strip()
-
-        self.bold = soup.find("meta", {"name": "description"})['content']
-
-        self.body = ''
         try:
+            self.title = soup.find(id='mainTitle').h1.text.strip()
+        except AttributeError:
+            self.logger.log(Logger.ERROR, 'Error getting title for link:' + self.currentLink)
+
+        try:
+            self.bold = soup.find("meta", {"name": "description"})['content']
+        except AttributeError:
+            self.logger.log(Logger.ERROR, 'Error getting bold for link:' + self.currentLink)
+
+        try:
+            self.body = ''
             paragraphs = soup.find(id='detail').find_all('p')
             for par in paragraphs:
                 self.body += par.text
         except AttributeError:
-            self.logger.log(Logger.WARN, 'Article with no body')
+            self.logger.log(Logger.ERROR, 'Error getting body for link:' + self.currentLink)

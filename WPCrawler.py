@@ -98,11 +98,17 @@ class WPCrawler(Crawler):
 
         soup = self.read_page(link)
 
-        self.title = soup.find('header', {'class': 'narrow'}).find('div', {'class': 'h1'}).text
+        try:
+            self.title = soup.find('header', {'class': 'narrow'}).find('div', {'class': 'h1'}).text
+        except AttributeError:
+            self.logger.log(Logger.ERROR, 'Error getting title for link:' + self.currentLink)
 
         try:
             self.bold = soup.find("main", {"class": "ST-Artykul"}).find('div', {'class': 'lead'}).text.strip()
         except AttributeError:
-            pass
+            self.logger.log(Logger.ERROR, 'Error getting bold for link:' + self.currentLink)
 
-        self.body = soup.find(id='intertext1').text.rstrip()
+        try:
+            self.body = soup.find(id='intertext1').text.rstrip()
+        except AttributeError:
+            self.logger.log(Logger.ERROR, 'Error getting body for link:' + self.currentLink)

@@ -33,17 +33,16 @@ class InteriaCrawler(Crawler):
         try:
             self.title = soup.find(id='articleSingle1').h1.text
         except AttributeError:
-            self.logger.log(Logger.WARN, "Ignoring article - doesn't have a proper title")
-            return
+            self.logger.log(Logger.ERROR, 'Error getting title for link:' + self.currentLink)
 
         try:
             self.bold = soup.find("div", {"class": "lead textContent fontSize-medium"}).p.text
         except AttributeError:
-            self.logger.log(Logger.WARN, 'No bold section')
+            self.logger.log(Logger.ERROR, 'Error getting bold for link:' + self.currentLink)
 
         try:
             paragraphs = soup.find('div', {'class':'text textContent fontSize-medium'}).find_all('p')
             for par in paragraphs:
                 self.body += par.text
         except AttributeError:
-            self.logger.log(Logger.WARN, 'Article with no body')
+            self.logger.log(Logger.ERROR, 'Error getting body for link:', self.currentLink)

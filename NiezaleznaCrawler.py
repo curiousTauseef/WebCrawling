@@ -38,21 +38,23 @@ class NiezaleznaCrawler(Crawler):
         soup = self.read_page(link)
 
         try:
-            self.title = soup.find(id = 'content').h1.text
+            self.title = soup.find(id='content').h1.text
         except AttributeError:
-            self.logger.log(Logger.WARN, "Ignoring article - doesn't have a proper title")
-            return
+            self.logger.log(Logger.ERROR, 'Error getting title for link:' + self.currentLink)
 
         try:
             self.bold = soup.find(id='content').strong.text
         except AttributeError:
-            self.logger.log(Logger.WARN, 'No bold section')
+            self.logger.log(Logger.ERROR, 'Error getting bold for link:' + self.currentLink)
 
-        """ Text is added 'luzem' inside the div """
-        self.body = ''.join(soup.find("div", {"class": "node-content"}).findAll(text=True, recursive=False)) + ' '
-        """ Except for occasionally bolded text - that needs to be added separately """
-        for bolded_text in soup.find("div", {"class": "node-content"}).findAll('strong'):
-            self.body += bolded_text.text
+        try:
+            """ Text is added 'luzem' inside the div """
+            self.body = ''.join(soup.find("div", {"class": "node-content"}).findAll(text=True, recursive=False)) + ' '
+            """ Except for occasionally bolded text - that needs to be added separately """
+            for bolded_text in soup.find("div", {"class": "node-content"}).findAll('strong'):
+                self.body += bolded_text.text
+        except AttributeError:
+            self.logger.log(Logger.ERROR, 'Error getting body for link:' + self.currentLink)
 
     def read_page(self, link):
         return BeautifulSoup(self.opener.open(link), 'lxml')
