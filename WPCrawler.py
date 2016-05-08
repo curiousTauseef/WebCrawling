@@ -25,7 +25,7 @@ class WPCrawler(Crawler):
             for innerDiv in outer_div.find_all('div'):
                 try:
                     new_url = self.baseLink + innerDiv.find('a', {'class': 'lnk_nw'})['href']
-                    if new_url not in self.urlmap:
+                    if new_url not in self.urlmap.values():
                         self.urls.append(new_url)
                 except TypeError:
                     pass
@@ -35,7 +35,7 @@ class WPCrawler(Crawler):
             for link_div in content_div.find_all('a'):
                 try:
                     new_url = self.baseLink + link_div['href']
-                    if new_url not in self.urlmap:
+                    if new_url not in self.urlmap.values():
                         self.urls.append(new_url)
                 except TypeError:
                     pass
@@ -44,7 +44,7 @@ class WPCrawler(Crawler):
             for link_div in outer_div.find_all('a'):
                     try:
                         new_url = self.baseLink + link_div['href']
-                        if new_url not in self.urlmap:
+                        if new_url not in self.urlmap.values():
                             self.urls.append(new_url)
                     except TypeError:
                         pass
@@ -54,7 +54,7 @@ class WPCrawler(Crawler):
                     try:
                         if link_div['href'].endswith('wiadomosc.html'):
                             new_url = self.baseLink + link_div['href']
-                            if new_url not in self.urlmap:
+                            if new_url not in self.urlmap.values():
                                 self.urls.append(new_url)
                     except TypeError:
                         pass
@@ -64,7 +64,7 @@ class WPCrawler(Crawler):
                     try:
                         if link_div['href'].endswith('wiadomosc.html'):
                             new_url = self.baseLink + link_div['href']
-                            if new_url not in self.urlmap:
+                            if new_url not in self.urlmap.values():
                                 self.urls.append(new_url)
                     except TypeError:
                         pass
@@ -74,7 +74,7 @@ class WPCrawler(Crawler):
                 try:
                     if link_div['href'].endswith('wiadomosc.html'):
                         new_url = self.baseLink + link_div['href']
-                        if new_url not in self.urlmap:
+                        if new_url not in self.urlmap.values():
                             self.urls.append(new_url)
                 except TypeError:
                     pass
@@ -84,7 +84,7 @@ class WPCrawler(Crawler):
                 try:
                     if link_div['href'].endswith('wiadomosc.html'):
                         new_url = self.baseLink + link_div['href']
-                        if new_url not in self.urlmap:
+                        if new_url not in self.urlmap.values():
                             self.urls.append(new_url)
                 except TypeError:
                     pass

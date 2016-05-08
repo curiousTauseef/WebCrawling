@@ -8,7 +8,7 @@ Created on Mon Feb  8 22:19:41 2016
 import urllib2
 from bs4 import BeautifulSoup
 
-link = 'http://niezalezna.pl/80115-smierc-biegacza-podczas-zawodow'
+link = 'http://niezalezna.pl/80123-polska-atrakcyjna-dla-sieci-handlowych'
 opener = urllib2.build_opener()
 opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 soup = BeautifulSoup(opener.open(link), 'lxml')

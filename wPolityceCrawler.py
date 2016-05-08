@@ -19,7 +19,7 @@ class wPolityceCrawler(Crawler):
             new_url = article.find('a')['href']
             if not new_url.startswith('http'):
                 new_url = self.baseLink + article.find('a')['href']
-            if new_url not in self.urlmap:
+            if new_url not in self.urlmap.values():
                 self.urls.append(new_url)
 
     def scrape_text(self, link):
