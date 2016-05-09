@@ -5,16 +5,16 @@ Created on Sat Apr  2 23:32:13 2016
 @author: piotrgrudzien
 """
 
-import Utils
-from Logger import Logger
-from OnetCrawler import OnetCrawler
-from WPCrawler import WPCrawler
-from InteriaCrawler import InteriaCrawler
-from GazetaCrawler import GazetaCrawler
-from NiezaleznaCrawler import NiezaleznaCrawler
-from wPolityceCrawler import wPolityceCrawler
-from SimilarityFinder import SimilarityFinder
-import time
+from crawlers.InteriaCrawler import InteriaCrawler
+from utils.Logger import Logger
+from crawlers.NiezaleznaCrawler import NiezaleznaCrawler
+from crawlers.WPCrawler import WPCrawler
+from crawlers.wPolityceCrawler import wPolityceCrawler
+
+from analysis.SimilarityFinder import SimilarityFinder
+from crawlers.GazetaCrawler import GazetaCrawler
+from crawlers.OnetCrawler import OnetCrawler
+from utils import Utils
 
 
 class Runner:
@@ -35,7 +35,7 @@ class Runner:
         for crawler in self.crawlers:
             crawler.crawl(self.logger)
 
-        # self.sf.get_similar()
+        self.sf.get_similar()
 
 r = Runner()
 r.run()

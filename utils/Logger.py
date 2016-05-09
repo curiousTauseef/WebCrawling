@@ -5,7 +5,7 @@ Created on Sat Apr 23 11:54:03 2016
 @author: piotrgrudzien
 """
 
-import Utils
+import utils.Utils as ut
 
 class Logger:
     
@@ -17,6 +17,6 @@ class Logger:
         self.file = '../Logs/' + timestamp
         
     def log(self, level, message):
-        out = Utils.timestamp() + ' [' + level + '] ' + message
+        out = ut.timestamp() + ' [' + level + '] ' + message
         with(open(self.file, 'a')) as f:
             f.write(out + '\n')

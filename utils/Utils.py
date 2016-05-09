@@ -6,7 +6,7 @@ Created on Sat Apr  2 19:22:05 2016
 """
 import string, datetime, time, re, pickle
 import numpy as np
-from Logger import Logger
+import Logger
 
 
 def remove_punct(text):

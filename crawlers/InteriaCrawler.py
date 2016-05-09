@@ -5,11 +5,8 @@ Created on Sat Apr  2 19:29:22 2016
 @author: piotrgrudzien
 """
 
-from bs4 import BeautifulSoup
-from Crawler import Crawler
-from Logger import Logger
-import urllib2, pickle
-import time, datetime
+from crawlers.Crawler import Crawler
+from utils.Logger import Logger
 
 
 class InteriaCrawler(Crawler):

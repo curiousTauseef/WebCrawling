@@ -7,10 +7,15 @@ Created on Sat Apr 23 10:28:45 2016
 Generic logger (abstract class)
 """
 
-import pickle, urllib2, Utils
+import datetime
+import pickle
+import time
+import urllib2
+
+from utils.Logger import Logger
 from bs4 import BeautifulSoup
-from Logger import Logger
-import time, datetime
+
+from utils import Utils
 
 
 class Crawler:

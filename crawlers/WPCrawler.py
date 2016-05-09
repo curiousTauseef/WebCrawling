@@ -5,11 +5,8 @@ Created on Sun Apr  3 19:20:48 2016
 @author: piotrgrudzien
 """
 
-from bs4 import BeautifulSoup, Comment
-from Crawler import Crawler
-from Logger import Logger
-import urllib2
-import time, datetime, string, pickle
+from crawlers.Crawler import Crawler
+from utils.Logger import Logger
 
 
 class WPCrawler(Crawler):

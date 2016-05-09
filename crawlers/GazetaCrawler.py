@@ -5,9 +5,10 @@ Created on Sat Apr  2 19:29:22 2016
 @author: piotrgrudzien
 """
 
-from Crawler import Crawler
 from bs4 import Comment
-from Logger import Logger
+
+from crawlers.Crawler import Crawler
+from utils.Logger import Logger
 
 
 class GazetaCrawler(Crawler):
