@@ -50,6 +50,8 @@ class SimilarityFinder:
                 for i in [0, 1]:
                     # print self.serwismap[indices[i]], ':', self.titles[indices[i]]
                     print self.serwismap[indices[i]], ':', self.texts[indices[i]]
-                print sim[indices], 'at index', indices
+                print sim[indices], 'articles:', [x + 1 for x in indices]
+                print self.urlmap[indices[0] + 1]
+                print self.urlmap[indices[1] + 1]
                 count += 1
             sim[indices] = 0

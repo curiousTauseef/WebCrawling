@@ -45,4 +45,4 @@ class InteriaCrawler(Crawler):
             for par in paragraphs:
                 self.body += par.text
         except AttributeError:
-            self.logger.log(Logger.ERROR, 'Error getting body for link:', self.currentLink)
+            self.logger.log(Logger.ERROR, 'Error getting body for link:' + self.currentLink)

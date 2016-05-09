@@ -40,13 +40,15 @@ class GazetaCrawler(Crawler):
         try:
             if soup.find(id='artykul') is not None:
                 id_article = soup.find(id='artykul')
+                rec = False
             elif soup.find(id='article_body') is not None:
                 id_article = soup.find(id='article_body')
+                rec = True
                 self.logger.log(Logger.WARN, 'Using id=article_body')
             else:
                 self.logger.log(Logger.ERROR, 'Nor id=artykul nor id=article_body found')
                 return
-            for item in id_article.findAll(text=True, recursive=False):
+            for item in id_article.findAll(text=True, recursive=rec):
                 """ Ignore comments and empty strings """
                 if(not isinstance(item, Comment)) or (not item):
                     self.body += item
