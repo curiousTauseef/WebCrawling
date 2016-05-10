@@ -12,6 +12,7 @@ from crawlers.WPCrawler import WPCrawler
 from crawlers.wPolityceCrawler import wPolityceCrawler
 
 from analysis.SimilarityFinder import SimilarityFinder
+from analysis.LdaManager import LdaManager
 from crawlers.GazetaCrawler import GazetaCrawler
 from crawlers.OnetCrawler import OnetCrawler
 from utils import Utils
@@ -21,6 +22,7 @@ class Runner:
     def __init__(self):
         self.logger = None
         self.sf = None
+        self.lm = None
         self.crawlers = []
         self.crawlers.append(OnetCrawler())
         self.crawlers.append(WPCrawler())
@@ -32,10 +34,12 @@ class Runner:
     def run(self):
         self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
         self.sf = SimilarityFinder(self.logger)
+        self.lm = LdaManager(self.logger)
         for crawler in self.crawlers:
             crawler.crawl(self.logger)
 
-        self.sf.get_similar()
+        # self.sf.get_similar()
+        # self.lm.analyse()
 
 r = Runner()
 r.run()
