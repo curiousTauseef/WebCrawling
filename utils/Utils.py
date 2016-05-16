@@ -50,3 +50,8 @@ def get_max_indices(matrix):
     arg_max = np.argmax(matrix)
     rows = matrix.shape[1]
     return np.floor_divide(arg_max, rows), arg_max % rows
+
+def load_stop_words():
+    with open('../polishStopWords.txt') as f:
+        lines = f.read().splitlines()
+    return lines

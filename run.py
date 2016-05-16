@@ -35,11 +35,11 @@ class Runner:
         self.logger = Logger(Utils.timestamp()) # initialise logger for this crawl
         self.sf = SimilarityFinder(self.logger)
         self.lm = LdaManager(self.logger)
-        for crawler in self.crawlers:
-            crawler.crawl(self.logger)
+        # for crawler in self.crawlers:
+        #     crawler.crawl(self.logger)
 
         # self.sf.get_similar()
-        # self.lm.analyse()
+        self.lm.analyse()
 
 r = Runner()
 r.run()
